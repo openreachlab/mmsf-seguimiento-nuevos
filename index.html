@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Gestión de Seguimientos | MMSF
+    </title>
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/styles.css"
+    >
+
+</head>
+
+<body>
+
+    <div class="watermark"></div>
+
+    <main class="container">
+
+        <img
+            src="assets/logo.png"
+            alt="MMSF"
+            class="logo"
+        >
+
+        <p class="slogan">
+            Nada nos detiene
+        </p>
+
+        <!-- LOGIN -->
+
+        <section
+            id="loginView"
+        >
+
+            <div class="card">
+
+                <h2>
+                    Acceso para seguimiento de personas nuevas
+                </h2>
+
+                <label>
+                    Código de acceso
+                </label>
+
+                <input
+                    type="text"
+                    id="codigoAcceso"
+                    placeholder="Ej: ADN34"
+                >
+
+                <button
+                    id="loginBtn"
+                    type="button"
+                >
+                    Ingresar
+                </button>
+
+                <p
+                    id="loginError"
+                    class="login-error hidden"
+                >
+                    Código inválido o inactivo
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- LISTADO -->
+
+        <section
+            id="listadoView"
+            class="hidden"
+        >
+
+            <div class="card">
+
+                <div class="header-top">
+
+                    <h2 id="tituloListado">
+                        Personas Registradas
+                    </h2>
+
+                    <span id="contadorPersonas">
+                        0 personas
+                    </span>
+
+                </div>
+
+                <div class="header-user">
+
+                    <p id="usuarioActual"></p>
+
+                    <button
+                        type="button"
+                        id="logoutBtn"
+                    >
+                        Cerrar sesión
+                    </button>
+
+                </div>
+
+                <div class="header-filtros">
+
+                    <input
+                        type="text"
+                        id="buscarPersona"
+                        placeholder="Buscar persona..."
+                    >
+
+                    <select id="filtroSede">
+
+                        <option value="">
+                            Todas las sedes
+                        </option>
+
+                    </select>
+
+                    <select id="filtroCampo">
+
+                        <option value="">
+                            Filtrar por...
+                        </option>
+
+                        <option value="evangelizador">
+                            Registrado por
+                        </option>
+
+                        <option value="ultimoResponsable">
+                            Último responsable
+                        </option>
+
+                        <option value="seguimientos">
+                            Seguimientos realizados
+                        </option>
+
+                    </select>
+
+                    <select id="filtroValor">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                    </select>
+
+                    <select id="ordenarPor">
+
+                        <option value="">
+                            Ordenar por...
+                        </option>
+
+                        <option value="nombreAsc">
+                            Nombre (A-Z)
+                        </option>
+
+                        <option value="nombreDesc">
+                            Nombre (Z-A)
+                        </option>
+
+                        <option value="recientes">
+                            Último seguimiento
+                        </option>
+
+                        <option value="seguimientos">
+                            Más seguimientos
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div
+                id="contenedorPersonas"
+            >
+            
+            </div>
+
+        </section>
+
+        <!-- DETALLE -->
+
+        <section
+            id="detalleView"
+            class="hidden"
+        >
+
+            <div class="card">
+
+                <button
+                    type="button"
+                    id="volverListadoBtn"
+                    class="back-btn"
+                >
+                    ← Volver
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+                    Información General
+                </h2>
+
+                <p>
+                    <strong>Nombre:</strong>
+                    <span id="detalleNombre"></span>
+                </p>
+
+                <p>
+                    <strong>Teléfono:</strong>
+                    <span id="detalleTelefono"></span>
+                </p>
+
+                <p>
+                    <strong>Correo:</strong>
+                    <span id="detalleCorreo"></span>
+                </p>
+
+                <p>
+                    <strong>Petición de oración:</strong>
+                    <span id="detallePeticion"></span>
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+                    Etapa del Proceso
+                </h2>
+
+                <p>
+                    <strong>Fecha de registro:</strong>
+                    <span id="detalleFechaRegistro"></span>
+                </p>
+
+                <p id="filaDetalleEstado">
+                    <strong>Estado:</strong>
+                    <span id="detalleEstado"></span>
+                </p>
+
+                <p>
+                    <strong>Registrado por:</strong>
+                    <span id="detalleEvangelizador"></span>
+                </p>
+
+                <p>
+                    <strong>Seguimientos realizados:</strong>
+                    <span id="detalleTotalSeguimientos"></span>
+                </p>
+
+                <p>
+                    <strong>Último seguimiento:</strong>
+                    <span id="detalleUltimoSeguimiento"></span>
+                </p>
+
+                <p>
+                    <strong>Último responsable:</strong>
+                    <span id="detalleResponsable"></span>
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+                    Historial de Seguimientos
+                </h2>
+
+                <div
+                    id="historialSeguimientos"
+                >
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="nuevoSeguimientoBtn"
+            >
+                Registrar Seguimiento
+            </button>
+
+        </section>
+
+        <!-- FORMULARIO SEGUIMIENTO -->
+
+        <section
+            id="seguimientoView"
+            class="hidden"
+        >
+
+            <div class="card">
+
+                <button
+                    type="button"
+                    id="volverDetalleBtn"
+                    class="back-btn"
+                >
+                    ← Volver
+                </button>
+
+            </div>
+
+            <form
+                id="seguimientoForm"
+            >
+
+                <div class="card">
+
+                    <h2>
+                        Registrar Seguimiento
+                    </h2>
+
+                    <label>
+                        Fecha seguimiento
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fechaSeguimiento"
+                        required
+                    >
+
+                    <label>
+                        Responsable
+                    </label>
+
+                    <select
+                        id="responsable"
+                        required
+                    >
+                    </select>
+
+                    <label>
+                        Tipo seguimiento
+                    </label>
+
+                    <select
+                        id="tipoSeguimiento"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccione...
+                        </option>
+
+                        <option>
+                            Llamada
+                        </option>
+
+                        <option>
+                            WhatsApp
+                        </option>
+
+                        <option>
+                            Visita
+                        </option>
+
+                        <option>
+                            Encuentro presencial
+                        </option>
+
+                        <option>
+                            Oración
+                        </option>
+
+                        <option>
+                            Otro
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Resultado
+                    </label>
+
+                    <select
+                        id="resultado"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccione...
+                        </option>
+
+                        <option>
+                            Aceptó invitación
+                        </option>
+
+                        <option>
+                            Requiere más seguimiento
+                        </option>
+
+                        <option>
+                            No desea continuar
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Etapa del proceso
+                    </label>
+
+                    <select
+                        id="estado"
+                        required
+                    >
+
+                        <option value="">
+                            Seleccione...
+                        </option>
+
+                        <option>
+                            Sigue en Evangelismo
+                        </option>
+
+                        <option>
+                            Sigue en Conexión
+                        </option>
+
+                        <option>
+                            Comenzó discipulado
+                        </option>
+
+                        <option>
+                            No continúa
+                        </option>
+
+                    </select>
+
+                    <label>
+                        Próxima acción
+                    </label>
+
+                    <textarea
+                        id="proximaAccion"
+                        rows="3"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="guardarSeguimientoBtn"
+                >
+                    Guardar Seguimiento
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>

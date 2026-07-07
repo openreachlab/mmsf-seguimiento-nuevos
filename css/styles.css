@@ -1,0 +1,313 @@
+:root{
+    --black:#000000;
+    --white:#FFFFFF;
+    --yellow:#FFD202;
+    --yellow-soft:#FBE172;
+    --gray-dark:#343339;
+    --gray-medium:#5A5B5D;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Montserrat',sans-serif;
+    min-height:100vh;
+}
+
+.watermark{
+    position:fixed;
+    inset:0;
+
+    background-image:url('../assets/logo_symbol.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:85%;
+
+    opacity:.04;
+
+    pointer-events:none;
+    z-index:0;
+}
+
+.container{
+    position:relative;
+    z-index:1;
+
+    width:100%;
+    max-width:760px;
+
+    margin:auto;
+    padding:24px 16px 50px;
+}
+
+.logo{
+    display:block;
+    width:220px;
+    max-width:90%;
+    margin:0 auto;
+}
+
+.slogan{
+    text-align:center;
+    color:var(--yellow);
+    font-weight:600;
+    margin-top:10px;
+    margin-bottom:30px;
+}
+
+.card{
+    background:var(--gray-dark);
+
+    border-radius:20px;
+
+    padding:24px;
+
+    margin-bottom:20px;
+
+    border:1px solid rgba(255,210,2,.15);
+}
+
+.card h2{
+    margin-bottom:20px;
+    color:var(--yellow);
+    font-size:1.1rem;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-size:.9rem;
+    font-weight:500;
+}
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+    border-radius:12px;
+
+    margin-bottom:18px;
+
+    font-family:'Montserrat',sans-serif;
+    font-size:15px;
+
+    background:#FFFFFF;
+    color:#000000;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    outline:2px solid var(--yellow);
+}
+
+textarea{
+    resize:vertical;
+}
+
+button{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:var(--yellow);
+
+    color:var(--black);
+
+    font-family:'Montserrat',sans-serif;
+    font-size:16px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+button:hover{
+    background:var(--yellow-soft);
+}
+
+button:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+}
+
+.hidden{
+    display:none;
+}
+
+@media (max-width:480px){
+
+    .card{
+        padding:18px;
+    }
+
+    .logo{
+        width:180px;
+    }
+
+}
+
+.login-error{
+
+    color:#ff6b6b;
+
+    margin-top:12px;
+
+    font-size:.9rem;
+
+}
+
+/* =========================
+   LISTADO DE PERSONAS
+========================= */
+
+.person-card{
+
+    background: var(--gray-dark);
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid rgba(255,210,2,.12);
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.person-card:hover{
+
+    border-color: rgba(255,210,2,.4);
+
+    transform:translateY(-3px);
+
+}
+
+.person-name{
+
+    color: var(--yellow);
+
+    font-size: 1.2rem;
+
+    font-weight: 700;
+
+    margin-bottom: 14px;
+
+}
+
+.person-info{
+
+    margin-bottom: 8px;
+
+    font-size: .9rem;
+
+    line-height:1.5;
+
+}
+
+/* =========================
+   BOTONES SECUNDARIOS
+========================= */
+
+.back-btn{
+
+    width: auto;
+
+    padding: 10px 18px;
+
+    font-size: .9rem;
+
+}
+
+/* =========================
+   USUARIO ACTUAL
+========================= */
+
+#usuarioActual{
+
+    color: var(--yellow);
+
+    font-weight: 600;
+
+    margin:0;
+
+}
+
+.header-top{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+
+}
+
+.header-user{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    gap:20px;
+
+}
+
+.header-filtros{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+
+}
+
+.header-filtros input{
+
+    flex:2;
+    min-width:260px;
+
+}
+
+.header-filtros select{
+
+    flex:1;
+    min-width:170px;
+
+}
+
+#logoutBtn{
+
+    width:auto;
+    padding:10px 18px;
+    margin:0;
+
+}
+
+#contadorPersonas{
+
+    font-size:.95rem;
+    font-weight:700;
+    color:#FFD202;
+
+}
