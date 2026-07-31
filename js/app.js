@@ -775,9 +775,7 @@ function verificarSesion() {
 
 }
 
-async function abrirDetalle(
-    idRegistro
-) {
+async function abrirDetalle(idRegistro) {
 
     try {
 
@@ -788,18 +786,14 @@ async function abrirDetalle(
 
         const personaResponse =
             await fetch(
-                `${WEB_APP_URL}?action=obtenerPersona&codigo=${codigo}&idRegistro=${idRegistro}`
+                `${WEB_APP_URL}?action=obtenerPersona&codigo=${encodeURIComponent(codigo)}&idRegistro=${encodeURIComponent(idRegistro)}`
             );
 
         const personaData =
             await personaResponse.json();
 
-        if (
-            !personaData.success
-        ) {
-
+        if (!personaData.success) {
             return;
-
         }
 
         personaActual =
@@ -811,7 +805,7 @@ async function abrirDetalle(
 
         const segResponse =
             await fetch(
-                `${WEB_APP_URL}?action=obtenerSeguimientos&codigo=${codigo}&idRegistro=${idRegistro}`
+                `${WEB_APP_URL}?action=obtenerSeguimientos&codigo=${encodeURIComponent(codigo)}&idRegistro=${encodeURIComponent(idRegistro)}`
             );
 
         const segData =
@@ -821,15 +815,17 @@ async function abrirDetalle(
             segData.seguimientos || []
         );
 
+        actualizarPersonaEnListado();
+
         listadoView.classList.add(
-          "hidden"
+            "hidden"
         );
 
         detalleView.classList.remove(
-          "hidden"
+            "hidden"
         );
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
 
@@ -1057,8 +1053,97 @@ async function guardarSeguimiento(
 
     seguimientoForm.reset();
 
-    await abrirDetalle(
-        personaActual.idRegistro
+    /*
+      Actualizamos la persona con la información
+      que ya devolvió el backend.
+    */
+
+    personaActual = {
+
+      ...personaActual,
+
+      ...result.persona
+
+    };
+
+    /*
+      Actualizamos el listado local
+    */
+
+    actualizarPersonaEnListado();
+
+    /*
+      Sólo volvemos a consultar
+      el historial de seguimientos.
+    */
+
+    const equipo =
+      localStorage.getItem(
+        "equipoMMSF"
+      );
+
+    if (
+      equipo !== "Admin"
+    ) {
+
+      const estadoPermitido =
+        equipo === "Evangelismo"
+          ? "Sigue en Evangelismo"
+          : "Sigue en Conexión";
+
+      if (
+        personaActual.estado !== estadoPermitido
+      ) {
+
+        alert(
+          "La persona fue transferida al siguiente proceso."
+        );
+
+        seguimientoView.classList.add(
+          "hidden"
+        );
+
+        detalleView.classList.add(
+          "hidden"
+        );
+
+        listadoView.classList.remove(
+          "hidden"
+        );
+
+        return;
+
+      }
+
+    }
+
+    const codigo =
+      localStorage.getItem(
+        "codigoMMSF"
+      );
+    
+    const segResponse =
+      await fetch(
+        `${WEB_APP_URL}?action=obtenerSeguimientos&codigo=${encodeURIComponent(codigo)}&idRegistro=${encodeURIComponent(personaActual.idRegistro)}`
+      );
+
+    const segData =
+      await segResponse.json();
+
+    mostrarSeguimientos(
+      segData.seguimientos || []
+    );
+
+    seguimientoView.classList.add(
+      "hidden"
+    );
+
+    detalleView.classList.remove(
+      "hidden"
+    );
+
+    mostrarPersona(
+      personaActual
     );
 
   } catch(error) {
@@ -1242,11 +1327,6 @@ nuevoSeguimientoBtn.addEventListener(
 
     cargarEstadosProceso();
 
-    if (personaActual) {
-      estadoSelect.value =
-        personaActual.estado;
-    }
-
     const hoy = new Date();
 
     hoy.setMinutes(
@@ -1363,3 +1443,61 @@ ordenarPor.addEventListener(
 );
 
 verificarSesion();
+
+function actualizarPersonaEnListado() {
+
+  const indice =
+    personasActuales.findIndex(
+      p => p.idRegistro === personaActual.idRegistro
+    );
+
+  if (indice === -1) {
+    return;
+  }
+
+  personasActuales[indice] = {
+
+    ...personasActuales[indice],
+
+    estado:
+      personaActual.estado,
+
+    ultimoSeguimiento:
+      personaActual.ultimoSeguimiento,
+
+    totalSeguimientos:
+      personaActual.totalSeguimientos,
+
+    ultimoResponsable:
+      personaActual.ultimoResponsable
+
+  };
+
+  const equipo =
+    localStorage.getItem("equipoMMSF");
+
+  if (
+    equipo !== "Admin"
+  ) {
+
+    const estadoPermitido =
+      equipo === "Evangelismo"
+        ? "Sigue en Evangelismo"
+        : "Sigue en Conexión";
+
+    if (
+      personaActual.estado !== estadoPermitido
+    ) {
+
+      personasActuales.splice(
+        indice,
+        1
+      );
+
+    }
+
+  }
+
+  aplicarFiltros();
+
+}
