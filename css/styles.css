@@ -204,6 +204,34 @@ button:disabled{
 
 }
 
+.viene-evangelismo {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    width: fit-content;
+
+    margin: 8px 0 14px 0;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    background: rgba(255, 210, 2, .12);
+
+    border: 1px solid rgba(255, 210, 2, .35);
+
+    color: var(--yellow);
+
+    font-size: .82rem;
+
+    font-weight: 600;
+
+}
+
 .person-name{
 
     color: var(--yellow);

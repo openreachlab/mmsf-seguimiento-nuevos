@@ -204,6 +204,8 @@ let personaActual = null;
 
 let personasActuales = [];
 
+let seguimientosActuales = [];
+
 async function iniciarSesion() {
 
   loginError.classList.add(
@@ -430,11 +432,38 @@ function renderizarPersonas(personas) {
       )
     );
 
+    const avisoEvangelismo =
+      persona.vieneDeEvangelismo
+        ? `
+          <div class="viene-evangelismo">
+            <span>Viene de evangelismo</span>
+            ${
+              persona.diasEnConexion !== null &&
+              persona.diasEnConexion !== undefined
+                ? `
+                  <span>
+                    · ${persona.diasEnConexion}
+                    ${
+                      persona.diasEnConexion === 1
+                        ? "día"
+                        : "días"
+                    }
+                    en Conexión
+                  </span>
+                `
+                : ""
+            }
+          </div>
+        `
+        : "";
+
     card.innerHTML = `
 
         <div class="person-name">
             ${persona.nombre}
         </div>
+
+        ${avisoEvangelismo}
 
         <div class="person-info">
             <strong>Fecha de registro:</strong>
@@ -479,6 +508,7 @@ function renderizarPersonas(personas) {
     );
 
   });
+
   actualizarContador(
     personas.length
   );
@@ -811,8 +841,11 @@ async function abrirDetalle(idRegistro) {
         const segData =
             await segResponse.json();
 
+        seguimientosActuales =
+            segData.seguimientos || [];
+
         mostrarSeguimientos(
-            segData.seguimientos || []
+            seguimientosActuales
         );
 
         actualizarPersonaEnListado();
@@ -1047,15 +1080,10 @@ async function guardarSeguimiento(
 
     }
 
-    alert(
-      "Seguimiento registrado correctamente."
-    );
-
-    seguimientoForm.reset();
-
     /*
-      Actualizamos la persona con la información
-      que ya devolvió el backend.
+    ==========================================
+    ACTUALIZAR PERSONA
+    ==========================================
     */
 
     personaActual = {
@@ -1067,72 +1095,66 @@ async function guardarSeguimiento(
     };
 
     /*
-      Actualizamos el listado local
+    ==========================================
+    AGREGAR NUEVO SEGUIMIENTO AL HISTORIAL
+    ==========================================
+    */
+
+    const nuevoSeguimiento = {
+
+      fecha:
+        data.fechaSeguimiento,
+
+      responsable:
+        data.responsable,
+
+      tipo:
+        data.tipoSeguimiento,
+
+      resultado:
+        data.resultado,
+
+      estado:
+        data.estado,
+
+      proximaAccion:
+        data.proximaAccion
+
+    };
+
+    seguimientosActuales = [
+
+      ...seguimientosActuales,
+
+      nuevoSeguimiento
+
+    ];
+
+    mostrarSeguimientos(
+      seguimientosActuales
+    );
+
+    /*
+    ==========================================
+    ACTUALIZAR PERSONA EN EL LISTADO LOCAL
+    ==========================================
     */
 
     actualizarPersonaEnListado();
 
     /*
-      Sólo volvemos a consultar
-      el historial de seguimientos.
+    ==========================================
+    LIMPIAR FORMULARIO
+    ==========================================
     */
 
-    const equipo =
-      localStorage.getItem(
-        "equipoMMSF"
-      );
+    seguimientoForm.reset();
 
-    if (
-      equipo !== "Admin"
-    ) {
-
-      const estadoPermitido =
-        equipo === "Evangelismo"
-          ? "Sigue en Evangelismo"
-          : "Sigue en Conexión";
-
-      if (
-        personaActual.estado !== estadoPermitido
-      ) {
-
-        alert(
-          "La persona fue transferida al siguiente proceso."
-        );
-
-        seguimientoView.classList.add(
-          "hidden"
-        );
-
-        detalleView.classList.add(
-          "hidden"
-        );
-
-        listadoView.classList.remove(
-          "hidden"
-        );
-
-        return;
-
-      }
-
-    }
-
-    const codigo =
-      localStorage.getItem(
-        "codigoMMSF"
-      );
-    
-    const segResponse =
-      await fetch(
-        `${WEB_APP_URL}?action=obtenerSeguimientos&codigo=${encodeURIComponent(codigo)}&idRegistro=${encodeURIComponent(personaActual.idRegistro)}`
-      );
-
-    const segData =
-      await segResponse.json();
-
-    mostrarSeguimientos(
-      segData.seguimientos || []
-    );
+    /*
+    ==========================================
+    REGRESAR AL DETALLE
+    ==========================================
+    */
 
     seguimientoView.classList.add(
       "hidden"
@@ -1144,6 +1166,10 @@ async function guardarSeguimiento(
 
     mostrarPersona(
       personaActual
+    );
+
+    alert(
+      "Seguimiento registrado correctamente."
     );
 
   } catch(error) {
@@ -1399,15 +1425,13 @@ loginBtn.addEventListener(
 
 volverListadoBtn.addEventListener(
     "click",
-    () => {
+    async () => {
 
         detalleView.classList.add(
           "hidden"
         );
 
-        listadoView.classList.remove(
-          "hidden"
-        );
+        await mostrarListado();
 
     }
 );
