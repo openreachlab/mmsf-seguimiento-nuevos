@@ -1,6 +1,7 @@
 const WEB_APP_URL =
   "https://script.google.com/macros/s/AKfycbz2-fiYjJ_M9_2tS-Q3YvyP5SLdQ6Uh1SnOKJ74kbb8Vp7pfKP0GYsMIAnjl29obCyUEA/exec";
  //https://script.google.com/macros/s/AKfycbz2-fiYjJ_M9_2tS-Q3YvyP5SLdQ6Uh1SnOKJ74kbb8Vp7pfKP0GYsMIAnjl29obCyUEA/exec
+ //https://script.google.com/macros/s/AKfycbz2-fiYjJ_M9_2tS-Q3YvyP5SLdQ6Uh1SnOKJ74kbb8Vp7pfKP0GYsMIAnjl29obCyUEA/exec
 
 const SESSION_DURATION =
   1000 * 60 * 60 * 12;
